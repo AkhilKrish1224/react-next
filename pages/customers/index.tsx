@@ -17,6 +17,7 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       customers: result.data.customers,
     },
+    revalidate: 60,
   };
 };
 
