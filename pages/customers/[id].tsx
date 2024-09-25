@@ -2,12 +2,12 @@ import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { Customer } from "./index";
 //Error : Import 'Customer' conflicts with local value, so must be declared with a type-only import when 'isolatedModules' is enabled.
-//Rename last default export to fix this
-import axios from "axios";
+//Renamed last default export to CustomerPage to fix this
+import axios, { AxiosError } from "axios";
 import { ParsedUrlQuery } from "querystring";
 
 type Props = {
-  customer: Customer;
+  customer?: Customer;
 };
 
 interface Params extends ParsedUrlQuery {
@@ -24,7 +24,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths: paths,
-    fallback: false,
+    fallback: true,
   };
 };
 
@@ -32,20 +32,36 @@ export const getStaticProps: GetStaticProps<Props, Params> = async (
   context
 ) => {
   const params = context.params!;
-
-  const result = await axios.get<{ customer: Customer }>(
-    `http://localhost:8000/api/customers/${params.id}`
-  );
-  console.log(result);
-  return {
-    props: {
-      customer: result.data.customer,
-    },
-  };
+  try {
+    const result = await axios.get<{ customer: Customer }>(
+      `http://localhost:8000/api/customers/${params.id}`
+    );
+    return {
+      props: {
+        customer: result.data.customer,
+      },
+    };
+  } catch (err) {
+    if (err instanceof AxiosError) {
+      if (err.response?.status === 404) {
+        return {
+          notFound: true,
+        };
+      }
+    }
+    return {
+      props: {},
+    };
+  }
 };
 
-const Customer: NextPage<Props> = (props) => {
-  return <h1>Customer {props.customer.name}</h1>;
+const CustomerPage: NextPage<Props> = (props) => {
+  const router = useRouter();
+  if (router.isFallback) {
+    return <p>Loading..</p>;
+  }
+
+  return <h1>Customer {props.customer ? props.customer.name : null}</h1>;
 };
 
-export default Customer;
+export default CustomerPage;
