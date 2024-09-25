@@ -24,6 +24,12 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
+Add MongoDB uri in .env.local file:
+
+```bash
+MONGODB_URI=mongodb+srv://<db_username>:<db_password>@customers.lzuf3.mongodb.net/<db_name>?retryWrites=true&w=majority&appName=Customers
+```
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
