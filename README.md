@@ -27,7 +27,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 Add MongoDB uri in .env.local file:
 
 ```bash
-MONGODB_URI=mongodb+srv://<db_username>:<db_password>@customers.lzuf3.mongodb.net/<db_name>?retryWrites=true&w=majority&appName=Customers
+MONGODB_URI = Your URI
 ```
 
 ## Learn More
