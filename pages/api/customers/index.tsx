@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import clientPromise from "../../../lib/mongodb";
 import { Customer } from "../../customers";
+import { ObjectId } from "mongodb";
 
 type Return = {
   customers: Customer[];
@@ -18,8 +19,37 @@ export const getCustomers = async (): Promise<Customer[]> => {
   return JSON.parse(JSON.stringify(data));
 };
 
-export default async (req: NextApiRequest, res: NextApiResponse<Return>) => {
-  const data = await getCustomers();
+export const addCustomer = async (customer: Customer): Promise<ObjectId> => {
+  const mongoClient = await clientPromise;
 
-  res.status(200).json({ customers: data });
+  const response = await mongoClient
+    .db()
+    .collection("customers")
+    .insertOne(customer);
+
+  return response.insertedId;
+};
+
+export default async (
+  req: NextApiRequest,
+  res: NextApiResponse<Return | ObjectId | { error: string }>
+) => {
+  if (req.method === "GET") {
+    const data = await getCustomers();
+    res.status(200).json({ customers: data });
+  } else if (req.method === "POST") {
+    console.log(req.body);
+
+    if (req.body.name && req.body.industry) {
+      const customer: Customer = {
+        name: req.body.name,
+        industry: req.body.industry,
+      };
+
+      const insertedId = await addCustomer(customer);
+      res.status(200).json(insertedId);
+    } else {
+      res.status(400).json({ error: "Name and Industry are required." });
+    }
+  }
 };
