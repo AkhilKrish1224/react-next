@@ -11,10 +11,6 @@ export type Customer = {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  //   const mongoClient = new MongoClient(
-  //     "mongodb+srv://admin:hw2sgvKahyDs3xZA@customers.lzuf3.mongodb.net/customers?retryWrites=true&w=majority&appName=Customers"
-  //   );
-
   const data = await getCustomers();
 
   console.log("!!!", data);

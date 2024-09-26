@@ -8,6 +8,7 @@ import { ParsedUrlQuery } from "querystring";
 import clientPromise from "../../lib/mongodb";
 import { ObjectId } from "mongodb";
 import { BSONError } from "bson";
+import { getCustomer } from "../api/customers/[id]";
 
 type Props = {
   customer?: Customer;
@@ -37,12 +38,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async (
   const params = context.params!;
 
   try {
-    const mongoClient = await clientPromise;
-
-    const data = (await mongoClient
-      .db()
-      .collection("customers")
-      .findOne({ _id: new ObjectId(params.id) })) as Customer;
+    const data = await getCustomer(params.id);
 
     console.log("!!!", data);
 
@@ -76,7 +72,7 @@ const CustomerPage: NextPage<Props> = (props) => {
     return <p>Loading..</p>;
   }
 
-  return <h1>{props.customer ? "Customer" + props.customer.name : null}</h1>;
+  return <h1>{props.customer ? "Customer " + props.customer.name : null}</h1>;
 };
 
 export default CustomerPage;
