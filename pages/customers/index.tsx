@@ -2,6 +2,7 @@ import { NextPage, GetStaticProps, InferGetStaticPropsType } from "next";
 //import axios from "axios";
 import { ObjectId } from "mongodb";
 import clientPromise from "../../lib/mongodb";
+import { getCustomers } from "../api/customers";
 
 export type Customer = {
   _id: ObjectId;
@@ -14,9 +15,7 @@ export const getStaticProps: GetStaticProps = async () => {
   //     "mongodb+srv://admin:hw2sgvKahyDs3xZA@customers.lzuf3.mongodb.net/customers?retryWrites=true&w=majority&appName=Customers"
   //   );
 
-  const mongoClient = await clientPromise;
-
-  const data = await mongoClient.db().collection("customers").find().toArray();
+  const data = await getCustomers();
 
   console.log("!!!", data);
 
@@ -27,7 +26,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return {
     props: {
-      customers: JSON.parse(JSON.stringify(data)),
+      customers: data,
     },
     revalidate: 60,
   };
