@@ -1,8 +1,9 @@
 import { NextPage, GetStaticProps, InferGetStaticPropsType } from "next";
-//import axios from "axios";
+import axios from "axios";
 import { ObjectId } from "mongodb";
 //import clientPromise from "../../lib/mongodb";
 import { getCustomers } from "../api/customers";
+import { useQuery } from "@tanstack/react-query";
 
 export type Customer = {
   _id?: ObjectId;
@@ -29,8 +30,22 @@ export const getStaticProps: GetStaticProps = async () => {
 };
 
 const Customers: NextPage = ({
-  customers,
+  customers: c,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const { data: { data: { customers = c } = {} } = {} } = useQuery({
+    queryKey: ["customers"],
+    queryFn: () => {
+      return axios("/api/customers");
+    },
+    // initialData: {
+    //   data: {
+    //     customers: customers,
+    //   },
+    // },
+  });
+
+  console.log(customers, c);
+
   return (
     <>
       <h1>Customers</h1>
