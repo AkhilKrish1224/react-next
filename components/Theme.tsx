@@ -159,12 +159,19 @@ export default function Theme(props: any) {
                 <ListItemText primary="Dashboard" />
               </ListItemButton>
             </Link>
-            {/* <ListItemButton>
-              <ListItemIcon>
-                <ShoppingCartIcon />
-              </ListItemIcon>
-              <ListItemText primary="Orders" />
-            </ListItemButton> */}
+            <Link
+              href="/orders"
+              style={{ color: "inherit", textDecoration: "inherit" }}
+            >
+              <ListItemButton
+                selected={router.pathname === "/orders" ? true : false}
+              >
+                <ListItemIcon>
+                  <ShoppingCartIcon />
+                </ListItemIcon>
+                <ListItemText primary="Orders" />
+              </ListItemButton>
+            </Link>
             <Link
               href="/customers"
               style={{ color: "inherit", textDecoration: "inherit" }}
