@@ -8,10 +8,17 @@ import { useQuery } from "@tanstack/react-query";
 import CustomerComponent from "../../components/Customer";
 import { Container, Grid } from "@mui/material";
 
+export type Order = {
+  description: string;
+  price: { $numberDecimal: string };
+  _id: ObjectId;
+};
+
 export type Customer = {
   _id?: ObjectId;
   name: string;
   industry: string;
+  orders: Order[];
 };
 
 export const getStaticProps: GetStaticProps = async () => {
