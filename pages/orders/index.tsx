@@ -5,6 +5,8 @@ import Container from "@mui/material/Container";
 import { GetStaticProps, NextPage } from "next/types";
 import { getCustomers } from "../api/customers";
 import { useRouter } from "next/router";
+import { Customer, Order } from "../customers";
+import { ObjectId } from "mongodb";
 
 const columns: GridColDef[] = [
   {
@@ -18,7 +20,7 @@ const columns: GridColDef[] = [
     width: 100,
   },
   {
-    field: "customer",
+    field: "customerName",
     headerName: "Customer",
     width: 150,
     editable: true,
@@ -31,7 +33,7 @@ const columns: GridColDef[] = [
     editable: true,
   },
   {
-    field: "price",
+    field: "orderPrice",
     headerName: "Price",
     type: "number",
     sortable: true,
@@ -39,20 +41,31 @@ const columns: GridColDef[] = [
   },
 ];
 
-export const getStaticProps: GetStaticProps = async () => {
+interface OrderRow extends Order {
+  orderPrice: number;
+  customerName: string;
+  customerId?: ObjectId;
+  id: ObjectId;
+}
+
+type Props = {
+  orders: Order[];
+};
+
+export const getStaticProps: GetStaticProps<Props> = async () => {
   const data = await getCustomers();
 
-  const orders: any = [];
+  const orders: OrderRow[] = [];
 
-  data.forEach((customer) => {
+  data.forEach((customer: Customer) => {
     if (customer.orders) {
-      customer.orders.forEach((order) => {
+      customer.orders.forEach((order: Order) => {
         orders.push({
           ...order,
-          customer: customer.name,
+          customerName: customer.name,
           customerId: customer._id,
           id: order._id,
-          price: order.price.$numberDecimal,
+          orderPrice: Number(order.price.$numberDecimal),
         });
       });
     }
@@ -73,7 +86,7 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-const Orders: NextPage = (props: any) => {
+const Orders: NextPage<Props> = (props) => {
   const { customerId } = useRouter().query;
   console.log(customerId);
 

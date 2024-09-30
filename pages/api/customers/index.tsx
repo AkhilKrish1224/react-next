@@ -31,7 +31,7 @@ export const addCustomer = async (customer: Customer): Promise<ObjectId> => {
   return response.insertedId;
 };
 
-export default async (
+export const apiCustomers = async (
   req: NextApiRequest,
   res: NextApiResponse<Return | ObjectId | { error: string }>
 ) => {
@@ -64,3 +64,5 @@ export default async (
     }
   }
 };
+
+export default apiCustomers;

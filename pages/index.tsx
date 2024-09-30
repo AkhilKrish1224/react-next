@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import * as React from "react";
-import Typography from "@mui/material/Typography";
+import Typography, { TypographyProps } from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
@@ -51,7 +51,7 @@ const Home: NextPage = () => {
   );
 };
 
-function Copyright(props: any) {
+function Copyright(props: TypographyProps) {
   return (
     <Typography
       variant="body2"

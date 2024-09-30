@@ -76,7 +76,7 @@ const Drawer = styled(MuiDrawer, {
 
 const mdTheme = createTheme();
 
-export default function Theme(props: any) {
+export default function Theme(props: React.PropsWithChildren<object>) {
   const router = useRouter();
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
