@@ -42,7 +42,7 @@ const columns: GridColDef[] = [
 export const getStaticProps: GetStaticProps = async () => {
   const data = await getCustomers();
 
-  let orders: any = [];
+  const orders: any = [];
 
   data.forEach((customer) => {
     if (customer.orders) {
